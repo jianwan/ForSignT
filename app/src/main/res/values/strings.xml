@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">ForSignT</string>
+    <string name="check">考勤</string>
+    <string name="record">记录</string>
+    <string name="curriculum">课表</string>
+    <string name="mine">我的</string>
+    <string name="phoneNumber">电话号码</string>
+    <string name="email">e-mail</string>
+    <string name="setting">设置</string>
+    <string name="hintId">教师账号/电话/邮箱</string>
+    <string name="password">密码</string>
+    <string name="login">登陆</string>
+    <string name="goToRegister">注册</string>
+    <string name="rePassword">请再次输入密码</string>
+    <string name="register">注册</string>
+
+</resources>
