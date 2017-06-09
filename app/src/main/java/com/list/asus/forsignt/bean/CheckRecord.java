@@ -3,7 +3,7 @@ package com.list.asus.forsignt.bean;
 import java.util.Date;
 
 import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.datatype.BmobGeoPoint;
 
 
 //考勤记录表
@@ -13,6 +13,7 @@ public class CheckRecord extends BmobObject {
     private String teachingClass;
     private String teaId;
     private Date endTime;
+    private BmobGeoPoint location;
 
 
     public Date getEndTime() {
@@ -47,5 +48,11 @@ public class CheckRecord extends BmobObject {
         this.teaId = teaId;
     }
 
+    public BmobGeoPoint getLocation() {
+        return location;
+    }
 
+    public void setLocation(BmobGeoPoint location) {
+        this.location = location;
+    }
 }

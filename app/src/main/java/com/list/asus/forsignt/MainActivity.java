@@ -1,8 +1,8 @@
 package com.list.asus.forsignt;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -34,13 +34,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private android.support.v4.app.FragmentManager manager;
     android.support.v4.app.FragmentTransaction transaction;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        //在使用SDK各组件之前初始化context信息，传入ApplicationContext
+//        //注意该方法要再setContentView方法之前实现
+//        SDKInitializer.initialize(getApplicationContext());
+
+
+     ;
+
         setContentView(R.layout.activity_main);
 
         //初始化 SDK信息
         Bmob.initialize(getApplicationContext(),"a16ec96b707da5d0f2a404b0ce9d755b");
+
+
 
 
 

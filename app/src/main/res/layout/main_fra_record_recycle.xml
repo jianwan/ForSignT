@@ -22,12 +22,23 @@
             android:text="aaaaa"/>
 
         <TextView
-            android:id="@+id/item_record_recycle_IsCheckin"
+            android:id="@+id/item_record_recycle_stuName"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_weight="1"
             android:text="bbbb"/>
+
+
+        <TextView
+            android:id="@+id/item_record_recycle_IsCheckin"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="cccc"/>
+
+
 
         <Button
             android:id="@+id/changeCheckin"
@@ -37,12 +48,12 @@
             android:text="改变打卡"/>
 
 
-        <EditText
-            android:id="@+id/remark"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_weight="1" />
+        <!--<EditText-->
+            <!--android:id="@+id/remark"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_weight="1" />-->
 
     </LinearLayout>
 

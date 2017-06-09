@@ -16,6 +16,11 @@ import cn.bmob.v3.listener.UpdateListener;
  * Created by wanjian on 2017/5/30.
  */
 
+
+/*
+ *邮箱绑定版块
+ * 点击发送button就会向指定邮箱发送一封验证邮件
+ */
 public class MineEmail extends AppCompatActivity implements View.OnClickListener {
 
     private EditText email_EditText;
@@ -26,11 +31,13 @@ public class MineEmail extends AppCompatActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mine_email);
 
+        //初始化控件
         initView();
 
 
     }
 
+    //初始化控件
     private void initView() {
 
         email_EditText=(EditText)findViewById(R.id.email_EditText);
@@ -41,6 +48,8 @@ public class MineEmail extends AppCompatActivity implements View.OnClickListener
 
     }
 
+
+    //点击事件
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -62,19 +71,15 @@ public class MineEmail extends AppCompatActivity implements View.OnClickListener
 //                onBackPressed();
 
                 sendEmail();
+                break;
 
 
         }
     }
 
-    public String getEmail(){
 
-        final String email=email_EditText.getText().toString();
 
-        return email;
-    }
-
-    //发送绑定邮件到指定邮箱
+    //发送绑定邮件到指定邮箱，如果点击链接就绑定该邮箱
     private void sendEmail() {
 
 //        final String mine_email=email_EditText.getText().toString();
@@ -118,4 +123,6 @@ public class MineEmail extends AppCompatActivity implements View.OnClickListener
         });
 
     }
+
+
 }

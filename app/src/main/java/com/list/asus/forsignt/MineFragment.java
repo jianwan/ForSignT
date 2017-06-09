@@ -33,6 +33,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
     private TextView teachId;
     private TextView email;
+    private TextView phoneNumber;
     private TextView settings;
     private LinearLayout phoneNumberL;
     private LinearLayout emailL;
@@ -48,6 +49,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         phoneNumberL=(LinearLayout)mineView.findViewById(R.id.phoneNumberL);
         emailL=(LinearLayout)mineView.findViewById(R.id.emailL);
         email=(TextView)mineView.findViewById(R.id.email);
+        phoneNumber=(TextView)mineView.findViewById(R.id.phoneNumber);
         settings=(TextView)mineView.findViewById(R.id.settings);
 
 //        //得到教师编号id
@@ -60,6 +62,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         BmobUser bmobUser = BmobUser.getCurrentUser();
         teachId.setText(bmobUser.getUsername());
 
+        queryPhoneNumber();
         queryEmail();
 
 
@@ -76,11 +79,33 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    private void queryPhoneNumber() {
+        final BmobQuery<User> queryPhoneNumber=new BmobQuery<>();
+        queryPhoneNumber.addWhereEqualTo("username",teachId.getText().toString());
+        queryPhoneNumber.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        queryPhoneNumber.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+                if (e==null){
+                    for (User user:list){
+                        if (!user.getMobilePhoneNumber().isEmpty()){
+                            phoneNumber.setText(user.getMobilePhoneNumber());
+                        }else {
+                            phoneNumber.setText("请绑定手机号");
+                        }
+                    }
+                }else {
+                    phoneNumber.setText("请绑定手机号");
+                }
+            }
+        });
+    }
+
     private void queryEmail() {
         final BmobQuery<User> queryEmail=new BmobQuery<>();
 
         queryEmail.addWhereEqualTo("username",teachId.getText().toString());
-//        queryEmail.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        queryEmail.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
         queryEmail.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
