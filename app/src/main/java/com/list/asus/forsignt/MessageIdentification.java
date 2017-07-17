@@ -56,7 +56,7 @@ public class MessageIdentification extends AppCompatActivity implements View.OnC
         BmobSMS.initialize(this,"a16ec96b707da5d0f2a404b0ce9d755b");
 
         bmobUser = BmobUser.getCurrentUser();
-        Toast.makeText(getBaseContext(),bmobUser.getUsername()+"",Toast.LENGTH_LONG).show();
+//        Toast.makeText(getBaseContext(),bmobUser.getUsername()+"",Toast.LENGTH_LONG).show();
         Log.d("TAG", "onCreate: "+bmobUser.getUsername());
 
         //初始化控件
@@ -83,6 +83,7 @@ public class MessageIdentification extends AppCompatActivity implements View.OnC
         switch (view.getId()){
             case R.id.phoneNumber_B:
                 getMessageIdentification();
+//                text();
                 break;
             case R.id.message_identification_B:
                 VerificationCode();
@@ -96,6 +97,22 @@ public class MessageIdentification extends AppCompatActivity implements View.OnC
                 break;
         }
 
+    }
+
+    private void text() {
+        BmobUser user=BmobUser.getCurrentUser();
+        user.setMobilePhoneNumberVerified(true);
+        user.setMobilePhoneNumber(phoneNumber_E.getText().toString());
+        user.update("ec36ef83f8", new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if(e==null){
+                    Log.i("bmob","更新成功");
+                }else{
+                    Log.i("bmob","更新失败："+e.getMessage()+","+e.getErrorCode());
+                }
+            }
+        });
     }
 
 
@@ -178,6 +195,7 @@ public class MessageIdentification extends AppCompatActivity implements View.OnC
         final BmobUser user=BmobUser.getCurrentUser();
         phoneNumber=phoneNumber_E.getText().toString();
         user.setMobilePhoneNumber(phoneNumber);
+        user.setMobilePhoneNumberVerified(true);
         Log.d("TAG", "333333: "+phoneNumber);
         user.update(objectId, new UpdateListener() {
             @Override

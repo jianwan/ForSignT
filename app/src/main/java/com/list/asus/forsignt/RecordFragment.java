@@ -16,8 +16,12 @@ import com.list.asus.forsignt.bean.CheckRecord;
 import com.list.asus.forsignt.bean.CheckResult;
 import com.list.asus.forsignt.bean.Class_stuId;
 import com.list.asus.forsignt.bean.Record;
+import com.list.asus.forsignt.bean.Student;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -35,7 +39,8 @@ public class RecordFragment extends Fragment  {
     String teachId;                //教师编号
     String teachingClass;
     String stuId;
-    String checkId="20170429s1";                //打卡id
+    String stuName;
+    String checkId;                //打卡id
     RecyclerView recyclerView;
     TextView isCheckin;
 
@@ -95,26 +100,44 @@ public class RecordFragment extends Fragment  {
     //拼凑出checkId来
     private void makeCkeckId(){
 
-        //判断月份和号数是否小于10，小于的话在它前面加个0保持checkId的位数一样
+//        getTime2();
+//        //判断月份和号数是否小于10，小于的话在它前面加个0保持checkId的位数一样
+//        String a=null;
+//        String b=null;
+//        if (month<10){
+//            a="0"+month;
+//        }else {
+//            a=""+month;
+//        }
+//        if (day<10){
+//            b="0"+day;
+//        }else {
+//            b=""+day;
+//        }
+//        checkId=year+a+b;
+        SimpleDateFormat sDateFormat= new SimpleDateFormat("yyyyMMddHH");
+        Date curDate=new Date(System.currentTimeMillis());
+        String date = sDateFormat.format(curDate);
+        checkId= ""+date+teachId;
+        Log.d("that", "makeCkeckId: "+checkId);
+//        queryClassStuId();
+    }
 
-        if (month>10&&day>10){
+    //得到当前系统时间  分年月日时分单独获取
+    private void getTime2() {
+        Calendar c=Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        hour = c.get(Calendar.HOUR_OF_DAY);
+        minute = c.get(Calendar.MINUTE);
 
-            checkId=year+month+day+teachId;
-        }else if (month>10&&day<10){
-
-            checkId=year+month+"0"+day+teachId;
-        }else if (month<10&&day>10){
-
-            checkId=year+"0"+month+day+teachId;
-        }else if (month<10&&day<10){
-
-            checkId=year+"0"+month+"0"+day+teachId;
-        }
     }
 
     private void queryClassStuId() {
         final BmobQuery<Class_stuId> queryClassStuId=new BmobQuery<>();
         queryClassStuId.addWhereEqualTo("teachingClass",teachingClass);
+        Log.d("that", "teachingClass: "+teachingClass);
         queryClassStuId.order("stuId");
         queryClassStuId.findObjects(new FindListener<Class_stuId>() {
             @Override
@@ -131,8 +154,11 @@ public class RecordFragment extends Fragment  {
                         int size = list.size();
                         for (Class_stuId class_stuId:list){
                             count++;
+//                            queryStuNameFromStudent(class_stuId.getStuId());
                             queryIsCheckin(class_stuId.getStuId(), count, size);
 //                            Toast.makeText(getContext(),"ok"+stuId,Toast.LENGTH_LONG).show();
+
+                            Log.d("that", "done: "+" "+count+"  "+size+" "+class_stuId.getStuId());
                         }
                     }else {
                         Toast.makeText(getContext(),"这节课暂时还没有学生打卡哟~",Toast.LENGTH_LONG).show();
@@ -145,12 +171,35 @@ public class RecordFragment extends Fragment  {
 
     }
 
+    private void queryStuNameFromStudent(String StuId) {
+        BmobQuery<Student>queryStuName=new BmobQuery<Student>();
+        queryStuName.addWhereEqualTo("stuId",StuId);
+        Log.d("that", "queryStuNameFromStudent: "+StuId);
+        queryStuName.findObjects(new FindListener<Student>() {
+            @Override
+            public void done(List<Student> list, BmobException e) {
+                if (e==null){
+                    if (!list.isEmpty()){
+                       for (Student student:list){
+                           stuName=student.getStuName();
+                           Log.d("that", "stuName: "+stuName);
+                       }
 
-    private void queryIsCheckin(String StuId, final int count, final int size) {
+                    }else {
+                        Log.d("that", "queryStuNameFromStudent: "+list.get(0).getStuName());
+                    }
+                }
+            }
+        });
+    }
+
+
+    private void queryIsCheckin(final String StuId, final int count, final int size) {
                 final Record record= new Record();
                 record.setStuId(StuId);
                 BmobQuery<CheckResult>queryIsChockin=new BmobQuery<CheckResult>();
                 queryIsChockin.addWhereEqualTo("stuId",StuId);
+                queryIsChockin.addWhereEqualTo("checkId",checkId);
                 queryIsChockin.findObjects(new FindListener<CheckResult>() {
                     @Override
                     public void done(List<CheckResult> list, BmobException e) {
@@ -163,7 +212,20 @@ public class RecordFragment extends Fragment  {
 //                                Toast.makeText(getContext(),"ok"+stuId,Toast.LENGTH_LONG).show();                                                                     int
 
 
+//                                if (list.get(0).getStuName().isEmpty()){
+//                                    queryStuNameFromStudent(StuId);
+//                                    record.setStuName(stuName);
+//                                    Log.d("that", "11111 "+stuName);
+//                                }else {
+//                                    record.setStuName(list.get(0).getStuName());
+//                                    Log.d("that", "22222 "+list.get(0).getStuName());
+//
+//                                }
+
+                                Log.d("that", "list.get(0).getStuName()1 "+list.get(0).getStuName()+list.get(0).getStuId());
                                 record.setStuName(list.get(0).getStuName());
+
+                                Log.d("that", "list.get(0).getStuName() "+list.get(0).getStuName()+list.get(0).getStuId());
                                 record.setClockStatus(true);
                                 record.setRemark(list.get(0).getRemark()+"");
 
@@ -179,7 +241,7 @@ public class RecordFragment extends Fragment  {
                                 recyclerView=(RecyclerView)getView().findViewById(R.id.recycler_result);
                                 LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
                                 recyclerView.setLayoutManager(layoutManager);
-                                RecordAdapter recordAdapter=new RecordAdapter(stuRecord);
+                                RecordAdapter recordAdapter=new RecordAdapter(getActivity(),stuRecord);
                                 Log.d("TAG", "done: "+stuRecord.size());
                                 recyclerView.setAdapter(recordAdapter);
                             }
@@ -187,6 +249,9 @@ public class RecordFragment extends Fragment  {
                             Toast.makeText(getContext(),"fail",Toast.LENGTH_LONG).show();
                         }
                     }
+
+
+
                 });
     }
 

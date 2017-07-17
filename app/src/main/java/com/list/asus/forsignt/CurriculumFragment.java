@@ -1,16 +1,13 @@
 package com.list.asus.forsignt;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,7 +69,7 @@ public class CurriculumFragment extends Fragment {
         BmobQuery<Schedule> querySchedule=new BmobQuery<>();
         querySchedule.addWhereEqualTo("teaId",teachId);
         querySchedule.order("classOrder");
-        querySchedule.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+//        querySchedule.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
         querySchedule.setLimit(20);
         querySchedule.findObjects(new FindListener<Schedule>() {
             @Override

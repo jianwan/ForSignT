@@ -102,9 +102,9 @@ public class MineEmail extends AppCompatActivity implements View.OnClickListener
             public void done(BmobException e) {
                 if (e==null){
                       if (!email.isEmpty()){
-                          Toast.makeText(getBaseContext(),"已发送邮件到"+email,Toast.LENGTH_LONG).show();
+                          Toast.makeText(getBaseContext(),"已发送邮件到"+email+"，请尽快去验证哦~",Toast.LENGTH_LONG).show();
                       }else {
-                          Toast.makeText(getBaseContext(),"您输入的邮箱为空"+email,Toast.LENGTH_LONG).show();
+                          Toast.makeText(getBaseContext(),"输入的邮箱不能为空哦"+email,Toast.LENGTH_LONG).show();
                       }
 //                      onBackPressed();
 

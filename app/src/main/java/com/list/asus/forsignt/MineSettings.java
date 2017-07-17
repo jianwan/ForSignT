@@ -39,5 +39,7 @@ public class MineSettings extends AppCompatActivity implements View.OnClickListe
 //        BmobUser currentUser=BmobUser.getCurrentUser();
         Intent intent=new Intent(MineSettings.this,LoginActivity.class);
         startActivity(intent);
+//        MainActivity.MainActivity.finish();
+//        System.exit(0);
     }
 }

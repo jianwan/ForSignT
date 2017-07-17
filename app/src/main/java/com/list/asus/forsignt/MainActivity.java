@@ -7,11 +7,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.baidu.mapapi.SDKInitializer;
+
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+
+//    static Activity MainActivity;
 
     private CheckFragment checkFragment;
     private RecordFragment recordFragment;
@@ -41,12 +46,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+//        MainActivity=this;
 //        //在使用SDK各组件之前初始化context信息，传入ApplicationContext
 //        //注意该方法要再setContentView方法之前实现
-//        SDKInitializer.initialize(getApplicationContext());
+        SDKInitializer.initialize(getApplicationContext());
 
 
-     ;
+
 
         setContentView(R.layout.activity_main);
 
@@ -103,12 +109,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkFragment = new CheckFragment();
         transaction.replace(R.id.main_fragment, checkFragment);
         transaction.commit();
-//        buToolbarRight.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
+        buToolbarRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,CheckFragment_Help.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -129,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 buToolbarRight.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         Intent intent=new Intent(MainActivity.this,CheckFragment_Help.class);
                         startActivity(intent);
                     }
@@ -146,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onClick(View v) {
                         Toast
-                             .makeText(getBaseContext(),"此功能还在完善中",Toast.LENGTH_SHORT)
+                             .makeText(getBaseContext(),"请把您的教师编号发送到3014198618@qq.com获取打卡记录哦~",Toast.LENGTH_SHORT)
                              .show();
                     }
                 });
@@ -162,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bottom_mine:
                 changeItemColor(bottomMine);
                 buToolbarLeft.setText("我的");
-                buToolbarRight.setText("修改");
+                buToolbarRight.setText("");
                 mineFragment = new MineFragment();
                 buToolbarRight.setTextColor(this.getResources().getColor(R.color.colorBlue));
                 transaction.replace(R.id.main_fragment, mineFragment);

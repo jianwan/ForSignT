@@ -53,6 +53,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login_button.setOnClickListener(this);
 
 
+
+
     }
 
     //实例化控件
@@ -65,6 +67,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login_id_content=login_id.getText().toString();
         login_password_content=login_password.getText().toString();
     }
+
 
 
     @Override
@@ -141,7 +144,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                       login();
 ////                       Toast.makeText(getBaseContext(),"OK",Toast.LENGTH_LONG).show();
 //                   }
-                    Toast.makeText(getBaseContext(),"ok",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(),"欢迎使用课堂打卡考勤系统~",Toast.LENGTH_LONG).show();
                     //查到了用户名才让它登陆
                     login();
 
@@ -211,7 +214,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void done(String s, BmobException e) {
                 if (e==null){
-                    Toast.makeText(getBaseContext(),s,Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getBaseContext(),s,Toast.LENGTH_LONG).show();
                 }else {
                     Toast.makeText(getBaseContext(),"fail",Toast.LENGTH_LONG).show();
                 }
