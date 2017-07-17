@@ -47,6 +47,13 @@
             android:layout_weight="1"
             android:text="改变打卡"/>
 
+        <!--<Button-->
+            <!--android:id="@+id/quejia"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="0.5"-->
+            <!--android:text="请假"/>-->
+
 
         <!--<EditText-->
             <!--android:id="@+id/remark"-->

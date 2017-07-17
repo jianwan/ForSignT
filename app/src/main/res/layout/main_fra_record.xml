@@ -41,7 +41,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_weight="1"
-            android:text="学生学号"/>
+            android:text="@string/studentId"/>
 
         <TextView
             android:id="@+id/item_record_recycle_stuName"
@@ -49,7 +49,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_weight="1"
-            android:text="学生姓名"/>
+            android:text="@string/studentName"/>
 
         <TextView
             android:id="@+id/item_record_recycle_IsCheckin"
@@ -57,7 +57,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_weight="1"
-            android:text="是否打卡"/>
+            android:text="@string/isCheck"/>
 
         <TextView
             android:id="@+id/ChangeCheckin"
@@ -65,7 +65,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_weight="1"
-            android:text="改变打卡"/>
+            android:text="@string/changeCheck"/>
 
 
 

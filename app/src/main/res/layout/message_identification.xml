@@ -4,6 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <!--<Button-->
+                    <!--android:id="@+id/help_back"-->
+                    <!--android:background="@drawable/back"-->
+                    <!--android:layout_width="32dp"-->
+                    <!--android:layout_height="32dp"-->
+                    <!--android:layout_centerVertical="true"/>-->
+                <TextView
+                    android:text="@string/phoneNumber"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </LinearLayout>
+
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -14,14 +44,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:hint="请输入你要绑定的号码"/>
+            android:hint="@string/qingshuruniyaobagndingdehaoma"/>
 
         <Button
             android:id="@+id/phoneNumber_B"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:hint="点击获取验证码"/>
+            android:hint="@string/huoquyanzhengma"/>
     </LinearLayout>
 
     <LinearLayout
@@ -34,14 +64,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:hint="验证码"/>
+            android:hint="@string/yanzhengma"/>
 
         <Button
             android:id="@+id/message_identification_B"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:hint="发送"/>
+            android:hint="@string/fasong"/>
     </LinearLayout>
 
 

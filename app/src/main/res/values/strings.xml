@@ -7,11 +7,27 @@
     <string name="phoneNumber">电话号码</string>
     <string name="email">e-mail</string>
     <string name="setting">设置</string>
-    <string name="hintId">教师账号/电话/邮箱</string>
+    <string name="hintId">教师账号</string>
     <string name="password">密码</string>
     <string name="login">登陆</string>
     <string name="goToRegister">注册</string>
     <string name="rePassword">请再次输入密码</string>
     <string name="register">注册</string>
+    <string name="isCheck">是否打卡</string>
+    <string name="studentName">学生姓名</string>
+    <string name="studentId">学生学号</string>
+    <string name="changeCheck">改变打卡</string>
+
+
+    <string name="helpContent">1.交互性\n\t老师客户端:老师发起考勤\n\t学生客户端:学生完成打卡\n\n2.唯一性\n\t一个手机ID默认绑定一个注册用户\n\n
+3.限距性\n\t客户端内置GPS定位系统，学生打卡定位点与老师发起考勤定位点距离超过100米，不能打卡\n\n4.限时性\n\t老师发起考勤10分钟后，学生客户端自动关闭打卡功能，视为缺勤\n\n
+5.联系老师\n\t学生可点击任课教师电话号码 想老师请假或做其他说明\n\n6.修改权限\n\t老师有权修改学生考勤结果\n\n7.课表查询\n\t老师和学生均可查看自己当天（及本周）的课程\n\n
+Copyright@黎磊@万健@彭仁菊\n若有问题，请联系我们3014198618@qq.com。\n
+祝您使用愉快！</string>
+    <string name="help">帮助</string>
+    <string name="qingshuruniyaobagndingdehaoma">请输入你要绑定的号码</string>
+    <string name="huoquyanzhengma">获取验证码</string>
+    <string name="yanzhengma">验证码</string>
+    <string name="fasong">发送</string>
 
 </resources>

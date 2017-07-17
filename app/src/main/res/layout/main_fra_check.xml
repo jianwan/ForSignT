@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/mainL"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -26,17 +27,46 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/check"
-        android:scaleX="2"
-        android:scaleY="2"
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:id="@+id/mapL"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="您当前未发起考勤"
-        android:textSize="8dp"
-        android:focusable="true"
-        android:clickable="true"/>
+        android:layout_below="@+id/mainL"
+        android:orientation="vertical">
+
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/bmapView"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:clickable="true">
+        </com.baidu.mapapi.map.MapView>
+
+    </LinearLayout>
+
+    <LinearLayout
+         android:id="@+id/checkL"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_below="@+id/mapL"
+        android:layout_marginTop="25dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/check"
+            android:layout_below="@+id/mapL"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:text="未发起考勤"
+            android:textSize="12dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="@drawable/checkbutton"/>
+
+    </LinearLayout>
+
+
 
 
     <LinearLayout
@@ -46,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/check">
+        android:layout_below="@+id/checkL">
         <ImageView
             android:id="@+id/image_range"
             android:layout_width="wrap_content"
@@ -64,7 +94,7 @@
         android:layout_below="@+id/lneaner_tip"
         android:layout_centerHorizontal="true"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <ImageView

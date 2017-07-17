@@ -4,6 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <!--<Button-->
+                <!--android:id="@+id/help_back"-->
+                <!--android:background="@drawable/back"-->
+                <!--android:layout_width="32dp"-->
+                <!--android:layout_height="32dp"-->
+                <!--android:layout_centerVertical="true"/>-->
+                <TextView
+                    android:text="@string/email"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </LinearLayout>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
