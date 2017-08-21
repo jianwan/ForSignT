@@ -58,7 +58,7 @@ public class CurriculumFragment extends Fragment {
         getCourses();
 
 
-         recyclerView=(RecyclerView)curriculumView.findViewById(R.id.recycler_curriculum);
+        recyclerView=(RecyclerView)curriculumView.findViewById(R.id.recycler_curriculum);
         LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 

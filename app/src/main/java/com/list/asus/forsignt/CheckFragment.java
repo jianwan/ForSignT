@@ -20,6 +20,12 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.model.LatLng;
 import com.list.asus.forsignt.bean.CheckRecord;
 import com.list.asus.forsignt.bean.Schedule;
 
@@ -60,6 +66,7 @@ public class CheckFragment extends Fragment {
     String teachId;                //教师编号
     String checkId;                //打卡id
     String classTime;              //课的节次
+    String classRoom;
     Boolean isHasClass=false;
     Boolean isCheckin=false;
     int count=0;                   //记录button的次数
@@ -74,6 +81,9 @@ public class CheckFragment extends Fragment {
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
 
+    private MapView mapView;
+    private BaiduMap baiduMap;
+    private boolean isFirstLocate=true;
 
 
 
@@ -95,16 +105,21 @@ public class CheckFragment extends Fragment {
         BmobUser bmobUser = BmobUser.getCurrentUser();
         id.setText(bmobUser.getUsername());
         teachId=id.getText().toString();
+        Log.d("this", "teachId "+teachId);
 
 
-
-
-        //得到系统时间为拼凑CkeckId
-        getTime2();
         //得到课的节次classTime，提供给查询Schedule表
         makeClassTime();
+
+
+
+
         //拼凑出checkId来
-        makeCkeckId();
+        makeCheckId();
+
+
+        //查询授课表里的该教师的教学班、课程名称，查询到才能发起打卡
+        querySchedule(classTime);
 
 
 
@@ -115,11 +130,9 @@ public class CheckFragment extends Fragment {
 
 
 
-        //查询授课表里的该教师的教学班、课程名称，查询到才能发起打卡
-        querySchedule();
 
-        //在checkRecord中查询是否有打卡记录，没有才能打卡成功
-        queryCheckRecord();
+
+
 
 
 
@@ -138,6 +151,8 @@ public class CheckFragment extends Fragment {
 //                    addToCheckResult();
 //
 //                }
+
+
 
                    if (isGetPlace==true&&isHasClass==true&&isCheckin==false){
                        //向考勤记录表里添加一行发起打卡数据
@@ -165,7 +180,7 @@ public class CheckFragment extends Fragment {
 
 
         if (isGetPlace=true){
-//            range.setText("已定位成功");
+            range.setText("已定位成功");
             image_range.setImageResource(R.drawable.yes);
         }else {
             range.setText("还未定位成功");
@@ -209,7 +224,7 @@ public class CheckFragment extends Fragment {
 
 
 
-        option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         //可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
 
         option.setCoorType("bd09ll");
@@ -280,10 +295,10 @@ public class CheckFragment extends Fragment {
         image_range=(ImageView)checkView.findViewById(R.id.image_range);
         check=(Button) checkView.findViewById(R.id.check);
 
-//        mLocationClient = new LocationClient(getApplicationContext());  //声明LocationClient类
-//            mLocationClient.registerLocationListener( myListener );         //注册监听函数
-//            initLocation();
-//            mLocationClient.start();
+        mapView=(MapView)checkView.findViewById(R.id.bmapView);
+        baiduMap=mapView.getMap();
+        baiduMap.setMyLocationEnabled(true);
+
 
     }
 
@@ -307,7 +322,7 @@ public class CheckFragment extends Fragment {
                         courseId=schedule.getCourseId();
 
                         courseName=schedule.getCourseName();
-                        courseN.setText("当前课程："+courseName);
+                        courseN.setText("当前课程："+courseName+" "+teachingClass);
 
                         isHasClass=true;
 
@@ -333,35 +348,41 @@ public class CheckFragment extends Fragment {
 
 
 
-    private void querySchedule() {
+    private void querySchedule(final String classtime ) {
 
-       BmobQuery<Schedule>queryTeaId=new BmobQuery<>();
-        queryTeaId.addWhereEqualTo("teaId",teachId);
-        BmobQuery<Schedule>queryClassTime=new BmobQuery<>();
-        queryClassTime.addWhereEqualTo("classTime",classTime);
-        List<BmobQuery<Schedule>>querySchedule=new ArrayList<BmobQuery<Schedule>>();
-        querySchedule.add(queryTeaId);
-        querySchedule.add(queryClassTime);
+//       BmobQuery<Schedule>queryTeaId=new BmobQuery<>();
+//        queryTeaId.addWhereEqualTo("teaId",teachId);
+//        BmobQuery<Schedule>queryClassTime=new BmobQuery<>();
+//        queryClassTime.addWhereEqualTo("classTime",classTime);
+//        List<BmobQuery<Schedule>>querySchedule=new ArrayList<BmobQuery<Schedule>>();
+//        querySchedule.add(queryTeaId);
+//        querySchedule.add(queryClassTime);
+//
+//        BmobQuery<Schedule>query=new BmobQuery<>();
+//        query.and(querySchedule);
 
         BmobQuery<Schedule>query=new BmobQuery<>();
-        query.and(querySchedule);
+        query.addWhereEqualTo("teaId",teachId);
+        query.addWhereEqualTo("classTime",classTime);
         query.findObjects(new FindListener<Schedule>() {
             @Override
             public void done(List<Schedule> list, BmobException e) {
-
-
                 if (e==null){
                     if (!list.isEmpty()){
                         for (Schedule schedule:list){
                             //teachingClass为教学班号
                             teachingClass= schedule.getTeachingClass();
                             courseId=schedule.getCourseId();
-
                             courseName=schedule.getCourseName();
-                            courseN.setText("当前课程："+courseName);
+                            classRoom=schedule.getClassroom();
+                            courseN.setText(courseName+" "+classRoom);
 
                             isHasClass=true;
+                            Log.d("this", "querySchedule1: "+teachingClass+" ");
+                            Log.d("this", "querySchedule1: "+teachId);
 
+                            //在checkRecord中查询是否有打卡记录，没有才能打卡成功
+                            queryCheckRecord();
 
                         }
 
@@ -382,22 +403,30 @@ public class CheckFragment extends Fragment {
     }
 
     private void queryCheckRecord() {
-        BmobQuery<CheckRecord>queryTeaId=new BmobQuery<>();
-        queryTeaId.addWhereEqualTo("teaId",teachId);
-        BmobQuery<CheckRecord>queryCheckId=new BmobQuery<>();
-        queryCheckId.addWhereEqualTo("checkId",checkId);
-        List<BmobQuery<CheckRecord>>querySchedule=new ArrayList<>();
-        querySchedule.add(queryTeaId);
-        querySchedule.add(queryCheckId);
+//        BmobQuery<CheckRecord>queryTeaId=new BmobQuery<>();
+//        queryTeaId.addWhereEqualTo("teaId",teachId);
+//        BmobQuery<CheckRecord>queryCheckId=new BmobQuery<>();
+//        queryCheckId.addWhereEqualTo("checkId",checkId);
+//        List<BmobQuery<CheckRecord>>querySchedule=new ArrayList<>();
+//        querySchedule.add(queryTeaId);
+//        querySchedule.add(queryCheckId);
+//
+//        BmobQuery<CheckRecord>query=new BmobQuery<>();
+//        query.and(querySchedule);
 
+
+        Log.d("this", "queryCheckRecord: "+checkId);
         BmobQuery<CheckRecord>query=new BmobQuery<>();
-        query.and(querySchedule);
+        query.addWhereEqualTo("teaId",teachId);
+        query.addWhereEqualTo("checkId",checkId);
         query.findObjects(new FindListener<CheckRecord>() {
             @Override
             public void done(List<CheckRecord> list, BmobException e) {
                if (e==null){
                    if (list.isEmpty()){
                        isCheckin=false;
+                       Log.d("this", "queryCheckRecord:查找失败 ");
+
                    }else {
                        check.setText("已发起考勤");
                        isCheckin=true;
@@ -405,6 +434,8 @@ public class CheckFragment extends Fragment {
                       for (CheckRecord checkRecord:list){
                           image_isCheck.setImageResource(R.drawable.yes);
                           isCheck.setText("上次发起考勤时间是："+checkRecord.getUpdatedAt());
+                          Log.d("this", "queryCheckRecord: "+checkId+" "+teachId+"  "+teachingClass);
+
 
                       }
                    }
@@ -455,43 +486,120 @@ public class CheckFragment extends Fragment {
 
 //          此处为实际函数方法
 //        if (hour==8||hour==9){
-//            classTime="星期三一二节课";
+//            classTime="星期四一二节课";
 //
 //        }else if (hour==10||hour==11){
-//            classTime="星期三三四节课";
+//            classTime="星期四三四节课";
 //
 //        }else if (hour==14||hour==15){
-//            classTime="星期一五六节课";
+//            classTime="星期四五六节课";
 //        }else if (hour==16||hour==17){
-//            classTime="星期一七八节课";
+//            classTime="星期四七八节课";
 //        }else if (hour==19||hour==20){
-//           classTime="星期一九十节课";
+//           classTime="星期四九十节课";
 //        }else if (hour==21||hour==22){
-//            classTime="星期一十一十二节课";
+//            classTime="星期四十一十二节课";
 //        }
-        //下面一行为测试代码
 
-        classTime="星期一三四节课";
+        getTime2();
+        Log.d("here", "1 "+classTime);
+
+        switch (hour){
+            case 8:
+            case 9:
+                classTime="星期五一二节课";
+                Log.d("here", "2 "+classTime);
+                break;
+            case 10:
+            case 11:
+                classTime="星期五三四节课";
+                Log.d("here", "3"+classTime);
+                break;
+            case 14:
+            case 15:
+                classTime="星期五五六节课";
+                break;
+            case 16:
+            case 17:
+                classTime="星期五七八节课";
+                Log.d("here", "4"+classTime);
+                break;
+            case 19:
+            case 20:
+                classTime="星期五九十节课";
+                Log.d("here", "5 "+classTime);
+                break;
+            case 21:
+            case 22:
+                classTime="星期五十一十二节课";
+                Log.d("here", "6 "+classTime);
+                break;
+            default:
+                classTime="null";
+                break;
+        }
+
+//        classTime="星期五一二节课";
+        Log.d("here", "7 "+classTime);
+
+
+//        classTime="星期四七八节课";
+        Log.d("here", "makeClassTime: "+classTime);
     }
 
 
     //拼凑出checkId来
-    private void makeCkeckId(){
+    private void makeCheckId(){
+
+
+        //得到系统时间为拼凑CkeckId
+//        getTime2();
 
         //判断月份和号数是否小于10，小于的话在它前面加个0保持checkId的位数一样
 
-        if (month>10&&day>10){
+//        if (month>10&&day>10){
+//
+//            checkId=year+""+month+""+day+""+teachId;
+//        }else if (month>10&&day<10){
+//
+//            checkId=year+""+month+"0"+day+""+teachId;
+//        }else if (month<10&&day>10){
+//
+//            checkId=year+"0"+month+""+day+""+teachId;
+//        }else if (month<10&&day<10){
+//
+//            checkId=year+"0"+month+"0"+day+""+teachId;
+//            Log.d("this", "makeCkeckId: "+teachingClass+" "+teachId);
+//
+//        }
 
-            checkId=year+month+day+teachId;
-        }else if (month>10&&day<10){
 
-            checkId=year+month+"0"+day+teachId;
-        }else if (month<10&&day>10){
+//        String a=null;
+//        String b=null;
+//
+//        if (month<10){
+//             a="0"+month;
+//        }else {
+//            a=""+month;
+//        }
+//        if (day<10){
+//             b="0"+day;
+//        }else {
+//            b=""+day;
+//        }
+//        checkId=year+a+b;
+//        Log.d("this", "makeCkeckId: "+year+" "+month+"  "+day+" "+teachId);
+//        Log.d("this", "makeCkeckId: "+month+" "+b);
+//        if (checkId!=null){
+//            queryCheckRecord();
+//        }
+        SimpleDateFormat sDateFormat= new SimpleDateFormat("yyyyMMddHH");
+        Date curDate=new Date(System.currentTimeMillis());
+        String date = sDateFormat.format(curDate);
+        checkId= ""+date+teachId;
 
-            checkId=year+"0"+month+day+teachId;
-        }else if (month<10&&day<10){
-
-            checkId=year+"0"+month+"0"+day+teachId;
+        if (checkId!=null){
+            queryCheckRecord();
         }
     }
 
@@ -561,6 +669,11 @@ public class CheckFragment extends Fragment {
 
             sb.append("\nradius : ");
             sb.append(location.getRadius());    //获取定位精准度
+
+
+            if (location.getLocType()==BDLocation.TypeGpsLocation||location.getLocType()==BDLocation.TypeNetWorkLocation){
+                navigateTo(location);
+            }
 
             if (location.getLocType() == BDLocation.TypeGpsLocation){
 
@@ -640,6 +753,24 @@ public class CheckFragment extends Fragment {
             Log.i("BaiduLocationApiDem", sb.toString());
 
 
+
+
+        }
+
+        private void navigateTo(BDLocation location) {
+            if (isFirstLocate){
+                LatLng ll=new LatLng(location.getLatitude(),location.getLongitude());
+                MapStatusUpdate update= MapStatusUpdateFactory.newLatLng(ll);
+                baiduMap.animateMapStatus(update);
+                update=MapStatusUpdateFactory.zoomTo(18f);
+                baiduMap.animateMapStatus(update);
+                isFirstLocate=false;
+            }
+            MyLocationData.Builder locationBuilder=new MyLocationData.Builder();
+            locationBuilder.latitude(location.getLatitude());
+            locationBuilder.longitude(location.getLongitude());
+            MyLocationData locationData=locationBuilder.build();
+            baiduMap.setMyLocationData(locationData);
 
         }
 
